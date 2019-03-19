@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WinterCore/react-pattern-lock.git"
+    "url": "git+https://github.com/nim-f/react-pattern-lock.git"
   },
   "keywords": [
     "react",
