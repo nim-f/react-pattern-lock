@@ -11,6 +11,7 @@ class PatternLock extends PureComponent {
 	static displayName = "PatternLock";
 	static propTypes = {
 		width : PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+		vSize : PropTypes.number,
 		path  : PropTypes.array,
 
 		onChange     : PropTypes.func,
@@ -86,8 +87,9 @@ class PatternLock extends PureComponent {
 		super(props);
 
 		this.points  = [];
+		const size = props.vSize ? props.size * props.vSize : props.size ** 2;
 
-		for (let i = (props.size ** 2) - 1; i >= 0; i -= 1) this.points.push({ x : 0, y : 0 });
+		for (let i = size - 1; i >= 0; i -= 1) this.points.push({ x : 0, y : 0 });
 
 		const frozen = props.path.length && props.freeze;
 
@@ -111,7 +113,7 @@ class PatternLock extends PureComponent {
 	}
 
 	componentDidMount() {
-		const height = this.wrapper.offsetWidth;
+		const height = this.props.vSize ? (this.wrapper.offsetWidth / this.props.size) * this.props.vSize   : this.wrapper.offsetWidth;
 		this.setState({ height }, () => {
 			this.updateProperties();
 			this.forceUpdate();
@@ -287,7 +289,7 @@ class PatternLock extends PureComponent {
 		const halfSize        = this.props.pointActiveSize / 2;
 		const { left, top }   = this.wrapper.getBoundingClientRect();
 		const { size }        = this.props;
-		const sizePerItem     = this.state.height / this.props.size;
+		const sizePerItem     = this.props.vSize ? this.state.height / this.props.vSize : this.state.height / this.props.size;
 		const halfSizePerItem = sizePerItem / 2;
 
 		this.left = left;
@@ -367,7 +369,8 @@ class PatternLock extends PureComponent {
 			pointSize,
 			pointActiveSize,
 			pointColor,
-			size
+			size,
+      vSize
 		} = this.props;
 
 		return this.points.map((x, i) => {
@@ -375,6 +378,7 @@ class PatternLock extends PureComponent {
 			const isActive = activeIndex > -1;
 			const orderNumber = isActive ? activeIndex + 1 : null;
 			const percentPerItem = 100 / size;
+			const percentPerItemH = vSize ? 100 / vSize : 100 / size;
 
 			return (
 				<div
@@ -382,7 +386,7 @@ class PatternLock extends PureComponent {
 					className="react-pattern-lock__point-wrapper"
 					style={{
 						width  : `${percentPerItem}%`,
-						height : `${percentPerItem}%`,
+						height : `${percentPerItemH}%`,
 						flex   : `1 0 ${percentPerItem}%`
 					}}
 				>
