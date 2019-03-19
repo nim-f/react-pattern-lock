@@ -388,7 +388,7 @@ class PatternLock extends PureComponent {
 			return (
 				<div
 					key={ i }
-					className={`react-pattern-lock__point-wrapper ${isDisabled ? 'point--disabled' : null}`}
+					className={`react-pattern-lock__point-wrapper ${isDisabled ? 'point--disabled' : ''}`}
 					style={{
 						width  : `${percentPerItem}%`,
 						height : `${percentPerItemH}%`,
