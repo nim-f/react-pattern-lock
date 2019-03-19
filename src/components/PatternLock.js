@@ -13,6 +13,7 @@ class PatternLock extends PureComponent {
 		width : PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 		vSize : PropTypes.number,
 		path  : PropTypes.array,
+    disabledPoints  : PropTypes.array,
 
 		onChange     : PropTypes.func,
 		onDotConnect : PropTypes.func,
@@ -48,11 +49,12 @@ class PatternLock extends PureComponent {
 
 	static defaultProps = {
 		size : 3,
+		vSize : false,
 		path : [],
 
 		onChange() { return Promise.resolve(); },
 		onDotConnect() {},
-
+    disabledPoints: [],
 		className : "",
 		style     : {},
 
@@ -219,16 +221,18 @@ class PatternLock extends PureComponent {
 	}
 
 	detectCollision({ x, y }) {
-		const { pointActiveSize, allowOverlapping } = this.props;
+		const { pointActiveSize, allowOverlapping, disabledPoints } = this.props;
 		const { path } = this.state;
 
 		this.points.forEach((point, i) => {
 			if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
+
 				if (
 					x > point.x
 					&& x < point.x + pointActiveSize
 					&& y > point.y
 					&& y < point.y + pointActiveSize
+					&& disabledPoints.indexOf(i) < 0
 				) {
 					this.activate(i);
 				}
@@ -374,6 +378,7 @@ class PatternLock extends PureComponent {
 		} = this.props;
 
 		return this.points.map((x, i) => {
+		  const isDisabled = this.props.disabledPoints.indexOf(i) >= 0
 			const activeIndex = this.state.path.indexOf(i);
 			const isActive = activeIndex > -1;
 			const orderNumber = isActive ? activeIndex + 1 : null;
@@ -383,7 +388,7 @@ class PatternLock extends PureComponent {
 			return (
 				<div
 					key={ i }
-					className="react-pattern-lock__point-wrapper"
+					className={`react-pattern-lock__point-wrapper ${isDisabled ? 'point--disabled' : null}`}
 					style={{
 						width  : `${percentPerItem}%`,
 						height : `${percentPerItemH}%`,

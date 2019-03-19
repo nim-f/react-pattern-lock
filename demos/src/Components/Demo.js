@@ -32,6 +32,7 @@ class Demo extends Component {
 						connectorNoCorners
 						size={ 3 }
 						vSize={ 6 }
+						disabledPoints={[2, 3, 4]}
 						allowOverlapping
 						onDotConnect={ this.onDotConnect }
 						onChange={ this.onChange }
