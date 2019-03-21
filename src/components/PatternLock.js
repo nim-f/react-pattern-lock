@@ -224,9 +224,13 @@ class PatternLock extends PureComponent {
 		this.props.onDotConnect(i);
 	}
 	deactivate(i) {
+	  console.log('deactivate')
+
 		const path = [...this.state.path];
+    console.log('path', path, i)
     const index = path.indexOf(i)
     path.splice(index + 1, 1)
+
     this.setState({ path });
 		this.props.onDotConnect(i);
 	}
