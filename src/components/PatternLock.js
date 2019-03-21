@@ -140,7 +140,7 @@ class PatternLock extends PureComponent {
 			this.wrapper.addEventListener("mousemove", this.onMove);
 			this.wrapper.addEventListener("touchmove", this.onMove);
 			this.reset();
-			this.updateMousePositionAndCheckCollision(evt, true);
+			this.updateMousePositionAndCheckCollision(evt, false);
 		}
 	}
 
@@ -166,8 +166,12 @@ class PatternLock extends PureComponent {
 				this.setState({ isLoading : false });
 			}
 		}).catch((err) => {
-			this.error(err);
-			this.setState({ isLoading : false });
+		  const props = this.props
+      const size = props.vSize ? props.size * props.vSize : props.size ** 2;
+      this.setState({ isLoading : false,isFrozen : true  });
+      if (this.state.path.length === size) {
+        this.error(err);
+      }
 		});
 	}
 
@@ -219,23 +223,31 @@ class PatternLock extends PureComponent {
 		this.setState({ path });
 		this.props.onDotConnect(i);
 	}
+	deactivate(i) {
+		const path = [...this.state.path];
+    const index = path.indexOf(i)
+    path.splice(index + 1, 1)
+    this.setState({ path });
+		this.props.onDotConnect(i);
+	}
 
 	detectCollision({ x, y }) {
 		const { pointActiveSize, allowOverlapping, disabledPoints } = this.props;
 		const { path } = this.state;
 
 		this.points.forEach((point, i) => {
-			if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
-
-				if (
-					x > point.x
-					&& x < point.x + pointActiveSize
-					&& y > point.y
-					&& y < point.y + pointActiveSize
-					&& disabledPoints.indexOf(i) < 0
-				) {
+			if (
+				x > point.x
+				&& x < point.x + pointActiveSize
+				&& y > point.y
+				&& y < point.y + pointActiveSize
+				&& disabledPoints.indexOf(i) < 0
+			) {
+				if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
 					this.activate(i);
-				}
+				} else {
+          if (path[path.length - 1] !== i) this.deactivate(i);
+        }
 			}
 		});
 	}

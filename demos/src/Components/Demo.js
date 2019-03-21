@@ -14,12 +14,12 @@ class Demo extends Component {
 	onChange = (path) => {
 		this.setState({ path });
 		return new Promise((resolve, reject) => {
-			setTimeout(() => (path.join("-") === "1-3-4-0" ? resolve() : reject()), 1500);
+			setTimeout(() => (path.join("-") === "1-3-4-0" ? resolve() : reject()), 100);
 		});
 	}
 
 	onDotConnect = (i) => {
-		console.log(i);
+		// console.log(i);
 	};
 
 	render() {
@@ -31,9 +31,9 @@ class Demo extends Component {
 						pointSize={ 15 }
 						connectorNoCorners
 						size={ 3 }
-						vSize={ 6 }
-						disabledPoints={[2, 3, 4]}
-						allowOverlapping
+						vSize={ 4 }
+						disabledPoints={[]}
+						allowOverlapping={false}
 						onDotConnect={ this.onDotConnect }
 						onChange={ this.onChange }
 					/>
