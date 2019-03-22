@@ -223,11 +223,9 @@ class PatternLock extends PureComponent {
 		this.setState({ path });
 		this.props.onDotConnect(i);
 	}
-	deactivate(i) {
-	  console.log('deactivate')
 
+	deactivate(i) {
 		const path = [...this.state.path];
-    console.log('path', path, i)
     const index = path.indexOf(i)
     path.splice(index + 1, 1)
 
@@ -248,7 +246,14 @@ class PatternLock extends PureComponent {
 				&& disabledPoints.indexOf(i) < 0
 			) {
 				if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
-					this.activate(i);
+				  if (this.props.start && path.length === 0 && i === this.props.start) {
+            this.activate(i);
+          } else if (this.props.start && path.length > 0) {
+            this.activate(i);
+          } else if (!this.props.start) {
+            this.activate(i);
+          }
+
 				} else {
           if (path[path.length - 1] !== i) this.deactivate(i);
         }

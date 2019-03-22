@@ -27,6 +27,7 @@ class Demo extends Component {
 			<Fragment>
 				<div className="center">
 					<PatternLock
+						start={0}
 						width={ 300 }
 						pointSize={ 15 }
 						connectorNoCorners
