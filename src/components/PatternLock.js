@@ -236,7 +236,7 @@ class PatternLock extends PureComponent {
 
 	checkIfNear = (index, next) => {
 	  const { size } = this.props
-    return index - 1 === next || index + 1 === next || index - size === next || index + size === next || next === 0;
+    return index - 1 === next || index + 1 === next || index - size === next || index + size === next ;
   }
 
 	detectCollision({ x, y }) {
@@ -251,7 +251,7 @@ class PatternLock extends PureComponent {
 				&& y > point.y
 				&& y < point.y + pointActiveSize
 				&& disabledPoints.indexOf(i) < 0
-        && this.checkIfNear(path[path.length-1], i)
+        && ((path.length > 0 && this.checkIfNear(path[path.length-1], i)) || path.length === 0)
 			) {
 				if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
 				  if (isStart && path.length === 0 && i === start) {
