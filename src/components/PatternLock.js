@@ -14,6 +14,7 @@ class PatternLock extends PureComponent {
 		vSize : PropTypes.number,
 		path  : PropTypes.array,
     disabledPoints  : PropTypes.array,
+    start  : PropTypes.number,
 
 		onChange     : PropTypes.func,
 		onDotConnect : PropTypes.func,
@@ -233,6 +234,11 @@ class PatternLock extends PureComponent {
 		this.props.onDotConnect(i);
 	}
 
+	checkIfNear = (index, next) => {
+	  const { size } = this.props
+    return index - 1 === next || index + 1 === next || index - size === next || index + size === next || next === 0;
+  }
+
 	detectCollision({ x, y }) {
 		const { pointActiveSize, allowOverlapping, disabledPoints, start } = this.props;
 		const { path } = this.state;
@@ -245,6 +251,7 @@ class PatternLock extends PureComponent {
 				&& y > point.y
 				&& y < point.y + pointActiveSize
 				&& disabledPoints.indexOf(i) < 0
+        && this.checkIfNear(path[path.length-1], i)
 			) {
 				if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
 				  if (isStart && path.length === 0 && i === start) {
