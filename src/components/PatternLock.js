@@ -234,8 +234,9 @@ class PatternLock extends PureComponent {
 	}
 
 	detectCollision({ x, y }) {
-		const { pointActiveSize, allowOverlapping, disabledPoints } = this.props;
+		const { pointActiveSize, allowOverlapping, disabledPoints, start } = this.props;
 		const { path } = this.state;
+		const isStart = typeof start !== 'undefined'
 
 		this.points.forEach((point, i) => {
 			if (
@@ -246,11 +247,11 @@ class PatternLock extends PureComponent {
 				&& disabledPoints.indexOf(i) < 0
 			) {
 				if ((allowOverlapping && path[path.length - 1] !== i) || path.indexOf(i) === -1) {
-				  if (this.props.start && path.length === 0 && i === this.props.start) {
+				  if (isStart && path.length === 0 && i === start) {
             this.activate(i);
-          } else if (this.props.start && path.length > 0) {
+          } else if (isStart && path.length > 0) {
             this.activate(i);
-          } else if (!this.props.start) {
+          } else if (!isStart) {
             this.activate(i);
           }
 
